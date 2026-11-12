@@ -1,13 +1,19 @@
+
+ //Imports Express and creates the app
 const express = require('express');
 const app = express()
 const port = 4000
+
+//Allows the frontend to communicate with the backend
 const cors = require('cors');
 app.use(cors());
 
+//Allows the server to read data sent from forms and JSON
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Sets the permissions for requests coming into the server
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -15,16 +21,22 @@ app.use(function(req, res, next) {
   next();
 });
 
+//Receives movie details sent from the frontend
 app.post('/api/movies', (req, res) => {
+  //Displays the received movie data in the terminal
   console.log(req.body);
   res.send("Movie Added:", req.body.title);
 })
 
+//Displays a message when the main page is visited
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+//Sends a list of movies when the frontend requests them
 app.get('/api/movies', (req, res) => {
+
+  //Stores the movie information in an array
   const movies = [
     {
       "Title": "Avengers: Infinity War (server)",
@@ -48,10 +60,12 @@ app.get('/api/movies', (req, res) => {
       "Poster": "https://m.media-amazon.com/images/M/MV5BNDQ4YzFmNzktMmM5ZC00MDZjLTk1OTktNDE2ODE4YjM2MjJjXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg"
     }
   ]
+
+  //Sends the movie list back as JSON
   res.json({movies})
 })
-    
 
+//Starts the server on port 4000
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
